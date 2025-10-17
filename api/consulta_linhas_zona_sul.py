@@ -1,10 +1,43 @@
 import requests
 import pandas as pd
 import os
-from sqlalchemy import create_engine
+import psycopg2
 from api.autenticacao import autenticar
 
-def buscar_linhas_zona_sul_e_salvar_postgres():
+def salvar_no_postgres(df):
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST"),
+        port=os.getenv("DB_PORT"),
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD")
+    )
+    cursor = conn.cursor()
+
+    # Criação da tabela (ajuste os tipos conforme necessário)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS linhas_zona_sul (
+            cl INTEGER PRIMARY KEY,
+            lc BOOLEAN,
+            lt TEXT,
+            sl INTEGER,
+            tp TEXT
+        )
+    """)
+    conn.commit()
+
+    for _, row in df.iterrows():
+        cursor.execute("""
+            INSERT INTO linhas_zona_sul (cl, lc, lt, sl, tp)
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (cl) DO NOTHING
+        """, (row['cl'], row['lc'], row['lt'], row['sl'], row['tp']))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print("✅ Dados salvos no PostgreSQL com sucesso!")
+
+def buscar_linhas_zona_sul():
     session = autenticar()
     if not session:
         print("❌ Sessão inválida.")
@@ -35,18 +68,9 @@ def buscar_linhas_zona_sul_e_salvar_postgres():
     if dfs:
         df_completo = pd.concat(dfs, ignore_index=True)
         df_completo.drop_duplicates(subset="cl", inplace=True)
-
-        # Conexão com PostgreSQL usando variáveis de ambiente
-        db_host = os.getenv("DB_HOST", "localhost")
-        db_port = os.getenv("DB_PORT", "5432")
-        db_name = os.getenv("DB_NAME", "sptrans")
-        db_user = os.getenv("DB_USER", "postgres")
-        db_password = os.getenv("DB_PASSWORD", "postgres")
-
-        engine = create_engine(f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}")
-
-        # Salvar no banco
-        df_completo.to_sql("linhas_zona_sul", engine, if_exists="replace", index=False)
-        print("✅ Dados salvos no PostgreSQL com sucesso!")
+        salvar_no_postgres(df_completo)
     else:
         print("⚠️ Nenhuma linha encontrada para os termos da Zona Sul.")
+
+# Executar
+buscar_linhas_zona_sul()

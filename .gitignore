@@ -48,3 +48,6 @@ Thumbs.db
 
 # Git
 .gitignore
+
+#arquivo .env
+.env
