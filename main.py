@@ -11,8 +11,8 @@ from api.consulta_linhas_zona_sul import buscar_linhas_zona_sul
 def main():
     session = autenticar()
     if session:
-        buscar_linhas_intervalo()
-        buscar_previsao_chegada()
+  #     buscar_linhas_intervalo()
+   #    buscar_previsao_chegada()
         buscar_linhas_zona_sul()
 
 if __name__ == "__main__":

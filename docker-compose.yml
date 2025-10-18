@@ -59,7 +59,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./sptrans_pipeline:/app/sptrans_pipeline
+      #- ./sptrans_pipeline:/app/sptrans_pipeline
+      - .:/app
       - ./.env:/app/.env
     networks:
       - sptrans_net
@@ -86,7 +87,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./sptrans_pipeline:/app/sptrans_pipeline
+     #- ./sptrans_pipeline:/app/sptrans_pipeline
+      - .:/app
       - ./.env:/app/.env
     networks:
       - sptrans_net
@@ -107,7 +109,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./sptrans_pipeline:/app/sptrans_pipeline
+      #- ./sptrans_pipeline:/app/sptrans_pipeline
+      - .:/app
       - ./.env:/app/.env
     command: webserver
     networks:
@@ -126,7 +129,8 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
-      - ./sptrans_pipeline:/app/sptrans_pipeline
+      #- ./sptrans_pipeline:/app/sptrans_pipeline
+      - .:/app
       - ./.env:/app/.env
     command: scheduler
     networks:
