@@ -1,0 +1,21 @@
+# Ignorar tudo exceto arquivos essenciais para o build
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.log
+**/*.db
+**/*.sqlite
+**/*.swp
+**/*.bak
+**/*.tmp
+**/*.pid
+**/*.sock
+airflow/
+.idea/
+.vscode/
+.env
+*.csv
+*.xlsx
+*.json
+pgdata/
+data/
