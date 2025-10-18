@@ -44,6 +44,94 @@ services:
     networks:
       - sptrans_net
 
+  airflow-init:
+    image: apache/airflow:2.7.1
+    container_name: airflow_init
+    depends_on:
+      - db
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db/sptrans
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    entrypoint: /bin/bash
+    command: -c "airflow db init"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./sptrans_pipeline:/app/sptrans_pipeline
+      - ./.env:/app/.env
+    networks:
+      - sptrans_net
+
+  airflow-create-user:
+    image: apache/airflow:2.7.1
+    container_name: airflow_create_user
+    depends_on:
+      - airflow-init
+    entrypoint: /bin/bash
+    command: >
+      -c "airflow users create
+      --username airflow
+      --firstname Admin
+      --lastname User
+      --role Admin
+      --email airflow@example.com
+      --password airflow"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db/sptrans
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./sptrans_pipeline:/app/sptrans_pipeline
+      - ./.env:/app/.env
+    networks:
+      - sptrans_net
+
+  airflow-webserver:
+    image: apache/airflow:2.7.1
+    container_name: airflow_webserver
+    depends_on:
+      - airflow-create-user
+    ports:
+      - "8080:8080"
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db/sptrans
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=True
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./sptrans_pipeline:/app/sptrans_pipeline
+      - ./.env:/app/.env
+    command: webserver
+    networks:
+      - sptrans_net
+
+  airflow-scheduler:
+    image: apache/airflow:2.7.1
+    container_name: airflow_scheduler
+    depends_on:
+      - airflow-webserver
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql+psycopg2://postgres:postgres@db/sptrans
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./sptrans_pipeline:/app/sptrans_pipeline
+      - ./.env:/app/.env
+    command: scheduler
+    networks:
+      - sptrans_net
+
 volumes:
   pgdata:
 

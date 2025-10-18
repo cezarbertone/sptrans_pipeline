@@ -51,3 +51,21 @@ Thumbs.db
 
 #arquivo .env
 .env
+
+
+
+# Ignorar arquivos e pastas gerados pelo Airflow
+airflow/logs/
+airflow/plugins/
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.db
+.env
+*.sqlite
+*.swp
+*.bak
+*.tmp
+*.pid
+*.sock
