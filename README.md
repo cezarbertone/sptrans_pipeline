@@ -5,20 +5,6 @@ Este projeto implementa um pipeline de dados que coleta informações da API Olh
 
 ## 🚀 Visão Geral da Arquitetura
 
-```mermaid
-graph TD
-    A[SPTrans API] --> B[App (Python)]
-    B --> C[PostgreSQL]
-    C --> D[PgAdmin]
-    E[Airflow] --> B
-    subgraph Docker
-        B
-        C
-        D
-        E
-    end
-```
-
 ## 🧰 Tecnologias Utilizadas
 
 - Python 3.11
