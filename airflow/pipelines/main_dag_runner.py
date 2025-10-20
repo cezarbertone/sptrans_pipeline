@@ -1,5 +1,10 @@
+
+
 import sys
-import os
+sys.path.append('/app/sptrans_pipeline')
+
+from main_dag_runner import run_pipeline
+
 from dotenv import load_dotenv
 
 # Adiciona a raiz do projeto ao sys.path
