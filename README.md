@@ -80,5 +80,5 @@ Os dados são armazenados na tabela `linhas_zona_sul` com os seguintes campos:
 
 ## 👨‍💻 Autores
 
-Wellington Santos | Cézar Tadeu
+Wellington Santos
 
