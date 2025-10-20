@@ -16,6 +16,7 @@ services:
       - DB_NAME=sptrans
       - DB_USER=postgres
       - DB_PASSWORD=postgres
+    restart: unless-stopped
 
   db:
     image: postgres:15
@@ -30,6 +31,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - sptrans_net
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4
@@ -43,6 +45,7 @@ services:
       - db
     networks:
       - sptrans_net
+    restart: unless-stopped
 
   airflow-init:
     image: apache/airflow:2.7.1
@@ -64,6 +67,7 @@ services:
       - ./.env:/app/.env
     networks:
       - sptrans_net
+    restart: unless-stopped
 
   airflow-create-user:
     image: apache/airflow:2.7.1
@@ -92,6 +96,7 @@ services:
       - ./.env:/app/.env
     networks:
       - sptrans_net
+    restart: unless-stopped
 
   airflow-webserver:
     image: apache/airflow:2.7.1
@@ -115,6 +120,7 @@ services:
     command: webserver
     networks:
       - sptrans_net
+    restart: unless-stopped
 
   airflow-scheduler:
     image: apache/airflow:2.7.1
@@ -135,6 +141,7 @@ services:
     command: scheduler
     networks:
       - sptrans_net
+    restart: unless-stopped
 
 volumes:
   pgdata:
