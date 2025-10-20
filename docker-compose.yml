@@ -45,6 +45,8 @@ services:
       - db
     networks:
       - sptrans_net
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
     restart: unless-stopped
 
   airflow-init:
@@ -145,6 +147,6 @@ services:
 
 volumes:
   pgdata:
-
+  pgadmin_data:
 networks:
   sptrans_net:

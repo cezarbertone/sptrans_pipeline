@@ -60,6 +60,16 @@ docker-compose up --build -d
 - Airflow: [http://localhost:8080](http://localhost:8080)
 - PgAdmin: [http://localhost:5050](http://localhost:5050)
 
+## 🛠️ Conexão com o Banco via PgAdmin
+
+| Campo                 | Valor      |
+|----------------------|------------|
+| **Host name/address**| `db`       |
+| **Port**             | `5432`     |
+| **Maintenance database** | `sptrans` |
+| **Username**         | `postgres` |
+| **Password**         | `postgres` |
+``
 ## 📅 Agendamento com Airflow
 
 O DAG `sptrans_pipeline_dag` é executado diariamente às 4h da manhã e chama o script principal que coleta e salva os dados da Zona Sul de São Paulo.
