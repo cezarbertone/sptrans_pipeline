@@ -23,7 +23,7 @@ dag = DAG(
 )
 
 def executar_pipeline():
-    from pipelines.main_dag_runner import run_pipelin
+    from pipelines.main_dag_runner import run_pipeline
     run_pipeline()
 
 executar_pipeline_task = PythonOperator(
