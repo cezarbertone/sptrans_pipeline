@@ -1,9 +1,17 @@
+
+
+from dotenv import load_dotenv
+load_dotenv()
+
+
 import requests
 import pandas as pd
 import os
 import psycopg2
 from minio import Minio
 from api.autenticacao import autenticar
+
+
 
 def salvar_no_postgres(df):
     conn = psycopg2.connect(
@@ -37,22 +45,42 @@ def salvar_no_postgres(df):
     conn.close()
     print("✅ Dados salvos no PostgreSQL com sucesso!")
 
-def salvar_no_minio(df):
-    caminho_csv = "/app/data/linhas_zona_sul.csv"
-    os.makedirs(os.path.dirname(caminho_csv), exist_ok=True)
-    df.to_csv(caminho_csv, index=False)
 
-    client = Minio(
-        "minio:9000",
-        access_key="minioadmin",
-        secret_key="minioadmin",
-        secure=False
-    )
-    bucket_name = "sptrans-data"
-    if not client.bucket_exists(bucket_name):
-        client.make_bucket(bucket_name)
-    client.fput_object(bucket_name, "linhas_zona_sul.csv", caminho_csv)
-    print("✅ Arquivo CSV enviado para o MinIO com sucesso!")
+
+def salvar_no_minio(df):
+    print("🚀 Iniciando salvamento no MinIO...")
+    try:
+        caminho_csv = "/app/data/linhas_zona_sul.csv"
+        os.makedirs(os.path.dirname(caminho_csv), exist_ok=True)
+        df.to_csv(caminho_csv, index=False)
+        print(f"📁 CSV salvo em: {caminho_csv}")
+
+        client = Minio(
+            os.getenv("MINIO_ENDPOINT", "minio:9000"),
+            access_key=os.getenv("MINIO_ROOT_USER", "minioadmin"),
+            secret_key=os.getenv("MINIO_ROOT_PASSWORD", "minioadmin"),
+            secure=False
+        )
+        print("🔐 Cliente MinIO criado.")
+
+        bucket_name = "sptrans-data"
+        if not client.bucket_exists(bucket_name):
+            print(f"🪣 Bucket '{bucket_name}' não existe. Criando...")
+            client.make_bucket(bucket_name)
+        else:
+            print(f"🪣 Bucket '{bucket_name}' já existe.")
+
+        # Enviar para a camada bronze
+        destino = "bronze/linhas_zona_sul.csv"
+        print(f"📤 Enviando arquivo para MinIO em: {destino}")
+        client.fput_object(bucket_name, destino, caminho_csv)
+        print(f"✅ Arquivo enviado para {destino} no bucket '{bucket_name}'")
+
+    except Exception as e:
+        print(f"❌ Erro ao salvar no MinIO: {type(e).__name__} - {e}")
+        raise
+
+
 
 def buscar_linhas_zona_sul():
     session = autenticar()
