@@ -1,3 +1,9 @@
+
+
+
+
+
+
 pandas
 requests
 sqlalchemy

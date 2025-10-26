@@ -1,19 +1,16 @@
 
-
 import sys
-sys.path.append('/app/sptrans_pipeline')
-
-from main_dag_runner import run_pipeline
-
+import os
 from dotenv import load_dotenv
 
-# Adiciona a raiz do projeto ao sys.path
-sys.path.append('/app')
+# Adiciona a raiz do projeto ao sys.path dinamicamente
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.append(ROOT_DIR)
 
 # Carrega variáveis de ambiente
-load_dotenv(dotenv_path='/app/.env')
+load_dotenv(dotenv_path=os.path.join(ROOT_DIR, '.env'))
 
-from main import main  # importa a função principal do seu pipeline
+from main import main
 
 def run_pipeline():
     main()

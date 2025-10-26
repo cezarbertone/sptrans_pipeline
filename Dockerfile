@@ -1,12 +1,13 @@
+# Dockerfile para o serviço app
 FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY . .
-
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN mkdir -p data
+
+COPY . .
 
 ENV MINIO_ENDPOINT=minio:9000 \
     MINIO_ROOT_USER=minioadmin \
