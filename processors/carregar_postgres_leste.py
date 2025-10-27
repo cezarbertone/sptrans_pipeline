@@ -12,8 +12,8 @@ def carregar_do_minio_para_postgres():
     )
 
     bucket_name = "sptrans-data"
-    objeto = "bronze/linhas_zona_sul.csv"
-    caminho_local = "/tmp/linhas_zona_sul.csv"
+    objeto = "bronze/linhas_zona_leste.csv"
+    caminho_local = "/tmp/linhas_zona_leste.csv"
 
     print("📥 Baixando arquivo do MinIO...")
     client.fget_object(bucket_name, objeto, caminho_local)
@@ -31,7 +31,7 @@ def carregar_do_minio_para_postgres():
     cursor = conn.cursor()
 
     cursor.execute("""
-        CREATE TABLE IF NOT EXISTS linhas_zona_sul (
+        CREATE TABLE IF NOT EXISTS linhas_zona_leste (
             cl INTEGER PRIMARY KEY,
             lc BOOLEAN,
             lt TEXT,
@@ -43,7 +43,7 @@ def carregar_do_minio_para_postgres():
 
     for _, row in df.iterrows():
         cursor.execute("""
-            INSERT INTO linhas_zona_sul (cl, lc, lt, sl, tp)
+            INSERT INTO linhas_zona_leste (cl, lc, lt, sl, tp)
             VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (cl) DO NOTHING
         """, (row['cl'], row['lc'], row['lt'], row['sl'], row['tp']))
