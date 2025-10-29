@@ -7,16 +7,6 @@ import os
 def executar_script():
     os.system("python processors/carregar_postgres.py")
 
-
-# Argumentos padrão da DAG
-default_args = {
-    'owner': 'Wellington Santos',
-    'start_date': datetime(2025, 10, 18),
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5)
-}
-
-
 # Definição da DAG
 with DAG(
     dag_id="carregar_dados_minio_postgres",
