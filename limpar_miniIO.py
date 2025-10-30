@@ -9,7 +9,7 @@ client = Minio(
 )
 
 # Lista todos os buckets
-buckets = client.list_buckets()
+buckets = client.list_buckets()4 57
 
 for bucket in buckets:
     print(f"🧹 Limpando bucket: {bucket.name}")
