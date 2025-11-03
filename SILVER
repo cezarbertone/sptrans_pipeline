@@ -8,8 +8,7 @@ from minio import Minio
 
 BRONZE_BUCKET = "bronze"
 SILVER_BUCKET = "silver"
-BRONZE_FILE = "dados_raw.csv"
-SILVER_FILE = "dados_silver.csv"
+
 
 
 def transform_bronze_to_silver():
@@ -48,7 +47,7 @@ def transform_bronze_to_silver():
         object_name=SILVER_FILE,
         data=BytesIO(data),
         length=len(data),
-        content_type="application/csv"
+       
     )
 
 
