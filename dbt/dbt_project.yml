@@ -1,0 +1,12 @@
+name: 'sptrans'
+version: '1.0.0'
+profile: 'sptrans'
+
+model-paths: ['models']
+target-path: 'target'
+clean-targets: ['target']
+
+models:
+  sptrans:
+    silver:
+      materialized: table
