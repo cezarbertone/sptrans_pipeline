@@ -1,51 +1,45 @@
+
+import os
+
+import traceback
 from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente do arquivo .env
 load_dotenv()
 
+# Importações dos módulos internos
 from api.autenticacao import autenticar
+from api.buscar_linhas import (
+    buscar_linhas_zona_sul,
+    buscar_linhas_zona_leste,
+    buscar_linhas_zona_norte,
+    buscar_linhas_zona_oeste,
+    buscar_linhas_zona_central
+)
+from processors.load_postgres import carregar_todas_zonas
 
-from api.buscar_linhas_zona_sul import buscar_linhas_zona_sul
-from processors.carregar_postgres import carregar_do_minio_para_postgres
-
-from api.buscar_linhas_zona_leste import buscar_linhas_zona_leste
-from processors.carregar_postgres_leste import carregar_do_minio_para_postgres as carregar_postgres_leste
-
-from api.buscar_linhas_zona_norte import buscar_linhas_zona_norte
-from processors.carregar_postgres_norte import carregar_do_minio_para_postgres as carregar_postgres_norte
-
-from api.buscar_linhas_zona_oeste import buscar_linhas_zona_oeste
-from processors.carregar_postgres_oeste import carregar_do_minio_para_postgres as carregar_postgres_oeste
-
-from api.buscar_linhas_zona_central import buscar_linhas_zona_central
-from processors.carregar_postgres_centro import carregar_do_minio_para_postgres as carregar_postgres_centro
-
-import time
 
 def main():
     try:
+        # Autenticação
         session = autenticar()
         if session:
-            # Zona sul
-            buscar_linhas_zona_sul()
-            carregar_do_minio_para_postgres()
+            print("✅ Autenticação realizada com sucesso!")
 
-            #Zona Leste
-            buscar_linhas_zona_leste()
-            carregar_postgres_leste()
+            # Buscar dados de todas as zonas usando a sessão autenticada
+            buscar_linhas_zona_sul(session)
+            buscar_linhas_zona_leste(session)
+            buscar_linhas_zona_norte(session)
+            buscar_linhas_zona_oeste(session)
+            buscar_linhas_zona_central(session)
 
-            #Zona Norte
-            buscar_linhas_zona_norte()
-            carregar_postgres_norte()
-
-            #Zona Oeste
-            buscar_linhas_zona_oeste()
-            carregar_postgres_oeste()
-
-            #Zona Central
-            buscar_linhas_zona_central()
-            carregar_postgres_centro()
-
+            # Carregar todas as zonas no Postgres
+            carregar_todas_zonas()
+        else:
+            print("❌ Autenticação falhou.")
     except Exception as e:
         print(f"❌ Erro durante execução: {e}")
+        traceback.print_exc()
 
 
 if __name__ == "__main__":

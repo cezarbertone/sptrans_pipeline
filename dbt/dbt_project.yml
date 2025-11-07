@@ -8,5 +8,12 @@ clean-targets: ['target']
 
 models:
   sptrans:
+    bronze:
+      +schema: bronze
+      +materialized: view
     silver:
-      materialized: table
+      +schema: silver
+      +materialized: table
+    gold:
+      +schema: gold
+      +materialized: table

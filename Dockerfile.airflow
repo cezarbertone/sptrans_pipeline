@@ -1,15 +1,23 @@
-
-
-
+# Imagem base do Airflow
 FROM apache/airflow:2.7.1
 
+# Instala dependências do sistema para Postgres
+USER root
+RUN apt-get update && apt-get install -y libpq-dev gcc && rm -rf /var/lib/apt/lists/*
 USER airflow
 
+# Copia requirements e instala dependências extras com constraints do Airflow
 COPY requirements.txt /requirements.txt
-
-# Use constraints para garantir compatibilidade
 ENV AIRFLOW_VERSION=2.7.1
 ENV PYTHON_VERSION=3.8
 ENV CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
-
 RUN pip install --no-cache-dir -r /requirements.txt -c "${CONSTRAINT_URL}"
+
+# Copia DAGs e módulos auxiliares para dentro do container
+COPY airflow/dags /opt/airflow/dags
+COPY processors /opt/airflow/processors
+COPY api /opt/airflow/api
+COPY config /opt/airflow/config
+
+# Ajusta PYTHONPATH para que Airflow encontre os módulos
+ENV PYTHONPATH="${PYTHONPATH}:/opt/airflow:/opt/airflow/api:/opt/airflow/processors:/opt/airflow/config"

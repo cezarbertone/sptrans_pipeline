@@ -1,0 +1,12 @@
+sptrans:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: db              # nome do serviço do Postgres no docker-compose
+      user: postgres
+      password: postgres
+      port: 5432
+      dbname: sptrans
+      schema: public
+      threads: 4

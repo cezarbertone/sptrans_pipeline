@@ -3,6 +3,11 @@ import pandas as pd
 import psycopg2
 from minio import Minio
 
+from dotenv import load_dotenv
+
+# Carregar variáveis de ambiente do arquivo .env
+load_dotenv()
+
 def carregar_todas_zonas():
     client = Minio(
         os.getenv("MINIO_ENDPOINT", "minio:9000"),
