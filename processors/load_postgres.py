@@ -34,7 +34,12 @@ def carregar_todas_zonas():
 
     for zona in zonas:
         objeto = f"bronze/linhas_zona_{zona}.csv"
-        caminho_local = f"/tmp/linhas_zona_{zona}.csv"
+       # caminho_local = f"/tmp/linhas_zona_{zona}.csv"
+        caminho_local = f"/opt/airflow/data/linhas_zona_{zona}.csv"
+        client.fget_object(bucket_name, objeto, caminho_local)
+
+        if not os.path.isfile(caminho_local):
+            raise FileNotFoundError(f"Arquivo não encontrado: {caminho_local}")
         tabela = f"bronze.linhas_zona_{zona}"
 
         print(f"\n📥 Baixando arquivo para zona {zona}...")
