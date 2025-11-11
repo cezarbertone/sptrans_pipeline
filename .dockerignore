@@ -1,21 +1,44 @@
-# Ignorar tudo exceto arquivos essenciais para o build
+# Diretórios de IDE e configs
+.idea/
+.vscode/
+.git/
+
+# Ambientes e dependências
+.env
+node_modules/
+
+# Cache e compilados
+__pycache__/
 **/__pycache__/
 **/*.pyc
 **/*.pyo
-**/*.log
-**/*.db
-**/*.sqlite
 **/*.swp
 **/*.bak
 **/*.tmp
+
+# Logs e arquivos temporários
+**/*.log
 **/*.pid
 **/*.sock
-airflow/
-.idea/
-.vscode/
-.env
+
+# Dados e arquivos grandes
+data/
+pgdata/
 *.csv
 *.xlsx
 *.json
-pgdata/
-data/
+
+# Airflow logs e dags processados
+airflow/logs/
+airflow/dag_processor_manager/
+airflow/scheduler/
+
+# dbt diretórios de compilação e execução
+dbt/logs/
+dbt/target/
+sptrans_pipeline/dbt/
+sptrans_pipeline/dbt_project/
+
+# Arquivos de banco local
+**/*.db
+**/*.sqlite

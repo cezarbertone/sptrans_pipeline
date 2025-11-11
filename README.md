@@ -1,12 +1,33 @@
 
 # SPTrans Pipeline
 
-Este projeto implementa um pipeline de dados que coleta informações da API Olho Vivo da SPTrans, processa os dados com Python e os armazena em um banco de dados PostgreSQL. A orquestração é feita com Apache Airflow, e o ambiente é totalmente containerizado com Docker Compose.
+Este projeto implementa um pipeline para coleta, processamento e análise de dados da 
+**API Olho Vivo** da SPTrans, permitindo monitoramento em tempo real da frota de ônibus da cidade de São Paulo.
+
+---
+
+## 📌 Objetivo
+Automatizar a ingestão e transformação dos dados fornecidos pela SPTrans, possibilitando análises sobre:
+- Localização dos veículos
+- Linhas e itinerários
+- Status operacional
+
+---
+
+## ⚙️ Tecnologias Utilizadas
+- **Python 3.x**
+- **Pandas** para manipulação de dados
+- **Requests** para integração com a API
+- **Airflow** (para orquestrar, os processo)
+- **Docker** para containerização
+- **PostgreSQL** 
+
+---
+
 
 ## 🚀 Visão Geral da Arquitetura
 
 ## 🧰 Tecnologias Utilizadas
-
 - Python 3.11
 - Pandas
 - Requests
@@ -17,21 +38,12 @@ Este projeto implementa um pipeline de dados que coleta informações da API Olh
 - Apache Airflow 2.7.1
 - Docker & Docker Compose
 
+
+
 ## 📁 Estrutura do Projeto
 
 ```
-sptrans_pipeline/
-├── api/
-│   ├── autenticacao.py
-│   └── consulta_linhas_zona_sul.py
-├── main.py
-├── requirements.txt
-├── .env
-├── airflow/
-│   └── dags/
-│       ├── main_dag_runner.py
-│       └── sptrans_dag.py
-└── docker-compose.yml
+
 ```
 
 ## ⚙️ Como Executar

@@ -52,7 +52,8 @@ Thumbs.db
 #arquivo .env
 .env
 
-
+./dbt/logs
+./dbt/dbt
 
 # Ignorar arquivos e pastas gerados pelo Airflow
 airflow/logs/
@@ -69,3 +70,4 @@ __pycache__/
 *.tmp
 *.pid
 *.sock
+
