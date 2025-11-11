@@ -12,3 +12,4 @@ aiobotocore
 boto3
 pyarrow
 fastparquet
+psycopg2-binary
