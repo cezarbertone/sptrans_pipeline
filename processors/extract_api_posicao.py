@@ -42,7 +42,7 @@ def extrair_posicao_e_salvar_minio():
         # Reordenar colunas
         df = df[colunas]
 
-        # Salvar em Parquet e enviar para MinIO
+        # Salvar diretamente no MinIO
         salvar_parquet_minio(df, "posicao_veiculos")
 
         print("🎯 Processo concluído com sucesso!")
@@ -74,20 +74,11 @@ def salvar_parquet_minio(df, base_nome):
             s3_client.create_bucket(Bucket=bucket_name)
             print(f"✅ Bucket '{bucket_name}' criado no MinIO")
 
-        # Diretório local para salvar arquivos
-        local_dir = "/opt/airflow/data"
-        os.makedirs(local_dir, exist_ok=True)
-
         # Nome do arquivo com timestamp
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         nome_arquivo = f"{base_nome}_{timestamp}.parquet"
-        caminho_local = os.path.join(local_dir, nome_arquivo)
 
-        # Salvar localmente em Parquet
-        df.to_parquet(caminho_local, engine="pyarrow", index=False)
-        print(f"📁 Arquivo Parquet salvo em: {caminho_local}")
-
-        # Converter para Parquet em memória
+        # Converter para Parquet em memória (sem salvar local)
         parquet_buffer = io.BytesIO()
         df.to_parquet(parquet_buffer, engine="pyarrow", index=False)
         parquet_buffer.seek(0)

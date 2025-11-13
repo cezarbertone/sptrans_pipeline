@@ -70,7 +70,7 @@ def limpar_dados(df):
     df['cl'] = df['cl'].astype(str)
     df['lc'] = df['lc'].astype(bool)
     df['lt'] = df['lt'].astype(str)
-    df['sl'] = df['sl'].astype(int)
+    df['sl'] = df['sl'].astype(int)  # Mantém 1 ou 2
     df['tl'] = df['tl'].astype(int)
     df['tp'] = df['tp'].astype(str)
     df['ts'] = df['ts'].astype(str)
@@ -83,7 +83,9 @@ def limpar_dados(df):
 
     # Ajuste nos valores
     df['lc'] = df['lc'].apply(lambda x: 'Sim' if x else 'Nao')
-    df['sl'] = df['sl'].apply(lambda x: 'Principal' if x == 1 else 'Secundario')
+
+    # ✅ Nova coluna concatenada lt + "-" + tl
+    df['LetreiroCompleto'] = df['lt'] + "-" + df['tl'].astype(str)
 
     # Remover duplicatas
     df.drop_duplicates(inplace=True)
@@ -93,7 +95,7 @@ def limpar_dados(df):
         'cl': 'CodigoLinha',
         'lc': 'LinhaCircular',
         'lt': 'NumeroLetreiro',
-        'sl': 'Sentido',
+        'sl': 'Sentido',  # Agora mantém 1 ou 2
         'tl': 'TipoLinha',
         'tp': 'DescricaoPrincipal',
         'ts': 'DescricaoSecundario',

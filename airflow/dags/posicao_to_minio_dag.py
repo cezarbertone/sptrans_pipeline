@@ -4,7 +4,9 @@ from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from datetime import datetime, timedelta
 from processors.extract_api_posicao import extrair_posicao_e_salvar_minio
 
+# -----------------------------
 # Configurações padrão
+# -----------------------------
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
@@ -14,9 +16,12 @@ default_args = {
     "retry_delay": timedelta(minutes=2)
 }
 
+# -----------------------------
+# DAG
+# -----------------------------
 with DAG(
     dag_id="posicao_to_minio",
-    description="Extrai posição dos veículos da API SPTrans e salva no MinIO, depois dispara DAG para carregar no Postgres",
+    description="Extrai posição dos veículos da API SPTrans e salva diretamente no MinIO, depois dispara DAG para carregar no Postgres",
     start_date=datetime(2025, 11, 10),
     schedule_interval="*/5 * * * *",  # a cada 5 minutos
     catchup=False,
@@ -25,7 +30,7 @@ with DAG(
     tags=["sptrans", "posicao", "minio"]
 ) as dag:
 
-    # Task 1: Extrair posição e salvar no MinIO
+    # Task 1: Extrair posição e salvar no MinIO (sem salvar local)
     extrair_posicao_task = PythonOperator(
         task_id="extrair_posicao_e_salvar_minio",
         python_callable=extrair_posicao_e_salvar_minio
@@ -39,4 +44,3 @@ with DAG(
     )
 
     # Orquestração
-    extrair_posicao_task >> trigger_dag2_task
